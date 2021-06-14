@@ -53,6 +53,9 @@ module <- function( Arguments ){
 
   # determine subcommand
   args              <- gsub(pattern = "\\-+[^\\s]+\\s", replacement = "", x = Arguments[1], perl = TRUE)
+  ## Check and remove leading whitespace
+  args <- gsub("^(\\s+)(\\w+)", "\\2", args)
+
   moduleoperation   <- regmatches(x = args, regexpr("^([^\\s]+)", args, perl = TRUE))
   cmds_needing_eval <- c("add", "load", "rm", "unload", "purge", "reload", "switch", "swap", "use", "unuse")
 
