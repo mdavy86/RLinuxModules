@@ -27,6 +27,9 @@ test_that("module commands", {
                         "/genome/samtools/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin")
       expect_equivalent(Sys.getenv("SAMTOOLS_VERSION"), "1.7")
       ## test additional whitespace
+      expect_equivalent(module(" load samtools"),
+                        "Sys.setenv('_LMFILES_'='/modulespath/samtools/1.7')\nSys.setenv('_LMFILES__modshare'='/modulespath/samtools/1.7')\nSys.setenv('LOADEDMODULES'='samtools/1.7')\nSys.setenv('LOADEDMODULES_modshare'='samtools/1.7:1')\nSys.setenv('MODULES_LMCONFLICT_modshare'='')\nSys.setenv('MODULES_LMCONFLICT'='')\nSys.setenv('MANPATH'='')\nSys.setenv('MANPATH_modshare'='')\nSys.setenv('PATH'='/genome/samtools/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin')\nSys.setenv('PATH_modshare'='/genome/samtools/bin:1:/usr/local/bin:1:/usr/bin:1:/bin:1:/usr/sbin:/sbin:1')\nSys.setenv('SAMTOOLS_VERSION'='1.7')\nmlstatus <- TRUE")
+      expect_equivalent(Sys.getenv("SAMTOOLS_VERSION"), "1.7")
       module("load  samtools")
       expect_equivalent(Sys.getenv("PATH"),
                         "/genome/samtools/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin")
@@ -42,6 +45,10 @@ test_that("module commands", {
                         "/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin")
       expect_true(is.na(Sys.getenv("SAMTOOLS_VERSION", unset = NA)))
       ## test additional whitespace
+      expect_equivalent(module(" unload samtools"),
+                        "Sys.setenv('_LMFILES_'='')\nSys.setenv('_LMFILES__modshare'='')\nSys.setenv('LOADEDMODULES'='')\nSys.setenv('LOADEDMODULES_modshare'='')\nSys.setenv('MODULES_LMCONFLICT_modshare'='')\nSys.setenv('MODULES_LMCONFLICT'='')\nSys.setenv('MANPATH'='')\nSys.setenv('MANPATH_modshare'='')\nSys.setenv('PATH'='/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin')\nSys.setenv('PATH_modshare'='/usr/local/bin:1:/usr/bin:1:/bin:1:/usr/sbin:/sbin:1')\nSys.unsetenv('SAMTOOLS_VERSION')\nmlstatus <- TRUE")
+      expect_equivalent(Sys.getenv("SAMTOOLS_VERSION"), "")
+
       module("unload  samtools")
       expect_equivalent(Sys.getenv("PATH"),
                         "/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin")
