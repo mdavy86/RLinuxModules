@@ -33,7 +33,7 @@
 #' @export
 module <- function( Arguments ){
 
-  # check if arguments are corrext type
+  # check if arguments are correct type
   if( !(class(Arguments) == "character" && length(Arguments)==1)){
     stop("Arguments must be a character vector of length 1")
   }
@@ -100,10 +100,7 @@ tcl_three_module <- function (moduleCmd, Arguments) {
 
 tcl_four_module <- function (moduleCmd, Arguments) {
   # determine subcommand
-  args              <- gsub(pattern = "\\-+[^\\s]+\\s", replacement = "", x = Arguments[1], perl = TRUE)
-  ## Check and remove leading whitespace
-  args <- gsub("^(\\s+)(\\w+)", "\\2", args)
-
+  args              <- gsub(pattern = "(\\-+[^\\s]+\\s|^\\s+)", replacement = "", x = Arguments[1], perl = TRUE)
   moduleoperation   <- regmatches(x = args, regexpr("^([^\\s]+)", args, perl = TRUE))
   cmds_needing_eval <- c("add", "load", "rm", "unload", "purge", "reload", "switch", "swap", "use", "unuse")
 
