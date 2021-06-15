@@ -106,8 +106,14 @@ tcl_four_module <- function (moduleCmd, Arguments) {
   cmds_needing_eval <- c("add", "load", "rm", "unload", "purge", "reload", "switch", "swap", "use", "unuse")
 
   # use the shiny interface
-  rCmds <- system2(moduleCmd, args = c("r", Arguments), stdout = TRUE, stderr = TRUE, timeout = 10)
-
+  if(1) cat(paste(c(moduleCmd, "r", Arguments, "\n")))
+  if(grepl("purge", Arguments)) {
+    ## purge can output STDERR - sticky modules
+    rCmds <- system2(moduleCmd, args = c("r", Arguments), stdout = TRUE, stderr = FALSE, timeout = 10)
+  } else {
+    rCmds <- system2(moduleCmd, args = c("r", Arguments), stdout = TRUE, stderr = TRUE, timeout = 10)
+  }
+  if(1) cat(rCmds, "\n")
   # execute R commands
   mlstatus <- FALSE
   if (any(match(x = moduleoperation, table = cmds_needing_eval), na.rm = TRUE)) {
@@ -120,6 +126,10 @@ tcl_four_module <- function (moduleCmd, Arguments) {
     }
   }
 
+  if(grepl("purge", Arguments)){
+    ## modify mlstatus when purge is selected
+    mlstatus <- TRUE
+  }
   if (length(rCmds) & !mlstatus){ stop("modulecmd was not successful, mlstatus != TRUE") }
   invisible(mlstatus)
 }
