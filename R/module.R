@@ -58,9 +58,9 @@ module <- function( Arguments ){
     if(compareVersion("3.2.10", moduleVersion) >= 0) {
       # 3.2.10
       # TODO: actually be backwards compatible
-      invisible(tcl_four_module(moduleCmd, Arguments))
+      return(tcl_four_module(moduleCmd, Arguments))
     } else {
-      invisible(tcl_four_module(moduleCmd, Arguments))
+      return(tcl_four_module(moduleCmd, Arguments))
     }
   }
 }
@@ -102,6 +102,7 @@ tcl_four_module <- function (moduleCmd, Arguments) {
   # determine subcommand
   args              <- gsub(pattern = "(\\-+[^\\s]+\\s|^\\s+)", replacement = "", x = Arguments[1], perl = TRUE)
   moduleoperation   <- regmatches(x = args, regexpr("^([^\\s]+)", args, perl = TRUE))
+  cmds_that_list    <- "list|avail|aliases"
   cmds_needing_eval <- c("add", "load", "rm", "unload", "purge", "reload", "switch", "swap", "use", "unuse")
 
   # use the shiny interface
@@ -112,7 +113,11 @@ tcl_four_module <- function (moduleCmd, Arguments) {
   if (any(match(x = moduleoperation, table = cmds_needing_eval), na.rm = TRUE)) {
     invisible( eval( parse(text = rCmds) ) )
   } else {
-    return(paste(rCmds, collapse = "\n"))
+    if(grepl(cmds_that_list, Arguments)) {
+      return(paste(rCmds, collapse = "\n"))
+    } else {
+      return(invisible(paste(rCmds, collapse = "\n")))
+    }
   }
 
   if (length(rCmds) & !mlstatus){ stop("modulecmd was not successful, mlstatus != TRUE") }
