@@ -8,7 +8,7 @@
 #'
 #' @export
 moduleInit <- function( version = '3.2.10',
-                        modulesHome = '/local/genome/Modules/3.2.10'){
+                        modulesHome = '/usr/share/Modules/'){
 
   # Check if modulecmd exists in the
   if(!file.exists( file.path(modulesHome,"bin/modulecmd") )){
